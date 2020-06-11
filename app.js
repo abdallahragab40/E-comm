@@ -10,6 +10,8 @@ const { port } = require("./config");
 var indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const instructorRouter = require("./routes/instructor");
+const communityRouter = require("./routes/community");
+const studentRouter = require("./routes/student");
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/instructor", instructorRouter);
+app.use("/community", communityRouter);
+app.use("/student", studentRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
