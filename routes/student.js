@@ -1,10 +1,12 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const CustomError = require("../helper/custome-error");
+const {
+  validateRegisteredStudent,
+  validateLoginRequist,
+} = require("../middleware/validateRequest");
 
 const Student = require("../models/student");
 const fileUpload = require("../middleware/file-upload");
-const { jwtSecret } = require("../config");
 
 const router = express.Router();
 
@@ -12,71 +14,42 @@ const router = express.Router();
 // @desc    Register Student
 // @access  Public
 
-router.post("/signup", fileUpload.single("image"), (req, res, next) => {
-  const url = req.protocol + "://" + req.get("host");
-  bcrypt.hash(req.body.password, 10).then((hash) => {
+router.post(
+  "/signup",
+  validateRegisteredStudent,
+  fileUpload.single("image"),
+  async (req, res, next) => {
+    const url = req.protocol + "://" + req.get("host");
     const student = new Student({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      password: hash,
-      phoneNumber: req.body.phoneNumber,
-      invitationCode: req.body.invitationCode,
+      ...req.body,
       imagePath: url + "/public/images/" + req.file.filename,
     });
-    student
-      .save()
-      .then((result) => {
-        res.status(201).json({
-          message: "Student Created",
-          result,
-        });
-      })
-      .catch((error) => {
-        res.status(500).json({ message: "Invalid authentication credentials" });
-      });
-  });
-});
+    await student.save();
+    res.status(201).json({ message: "Student Created" });
+  }
+);
 
 // @route   POST student/login
 // @desc    Register Student
 // @access  Public
 
-router.post("/login", (req, res, next) => {
-  let fetchedStudent;
-  Student.findOne({ email: req.body.email })
-    .then((student) => {
-      if (!student) {
-        return res.status(401).json({
-          message: "Auth failed!",
-        });
-      }
-      fetchedStudent = student;
-      return bcrypt.compare(req.body.password, student.password);
-    })
-    .then((result) => {
-      if (!result) {
-        return res.status(401).json({
-          message: "Auth failed!",
-        });
-      }
-      const token = jwt.sign(
-        { email: fetchedStudent.email, studentId: fetchedStudent._id },
-        jwtSecret,
-        {
-          expiresIn: "1d",
-        }
-      );
-      res.status(200).json({
-        token,
-        expiresIn: 36000,
-        studentId: fetchedStudent._id,
-      });
-    })
-    .catch((err) => {
-      return res.status(401).json({
-        message: "Invalid authentication credentials!",
-      });
-    });
+router.post("/login", validateLoginRequist, async (req, res, next) => {
+  let student = await Student.findOne({ email: req.body.email });
+
+  if (!student) {
+    throw new CustomError("Email not exists", 401);
+  }
+
+  const matchPassword = await student.checkPassword(req.body.password);
+  if (!matchPassword) {
+    throw new CustomError("Incorrect Password", 401);
+  }
+
+  const token = await student.generateToken();
+  res.json({
+    message: "Logged in successfully",
+    student,
+    token,
+  });
 });
 module.exports = router;

@@ -4,7 +4,6 @@ const express = require("express");
 const path = require("path");
 const logger = require("morgan");
 const cors = require("cors");
-const createError = require("http-errors");
 const { port } = require("./config");
 
 var indexRouter = require("./routes/index");
@@ -27,19 +26,15 @@ app.use("/instructor", instructorRouter);
 app.use("/community", communityRouter);
 app.use("/student", studentRouter);
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404, "Couldn't find this route"));
-});
-
-// error handler
-app.use((err, req, res, next) => {
-  if (res.headerSent) {
-    return next(err);
+// Error Handler
+app.use((error, req, res, next) => {
+  const message = error.message;
+  const statusCode = error.statusCode || 422;
+  if (statusCode < 500) {
+    res.status(statusCode).json({ ...error, message });
+  } else {
+    res.json({ ...error, message });
   }
-
-  res.status(err.status || 500);
-  res.send({ message: err.message || "Something went wrong" });
 });
 
 app.listen(port, () => console.log(`server listening on port ${port}`));
