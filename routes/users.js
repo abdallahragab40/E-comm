@@ -33,7 +33,7 @@ router.post(
   ]),
   async (req, res) => {
     if (!req.file) throw createError(422, "Profile Image is required");
-    const path = req.file.path.replace("public\\", "");
+    const path = req.file.path;
     const image = await cloudinary.uploader.upload(path, {
       tags: "express_sample",
     });
@@ -44,7 +44,7 @@ router.post(
     user.tokens.push({ token });
     res
       .status(201)
-      .send({ message: "user was registered successfully", user, token });
+      .send({ message: "user was registered successfully", user, token, expiresIn: 3600 });
   }
 );
 
@@ -75,6 +75,7 @@ router.post(
       message: "logged in successfully",
       user,
       token,
+      expiresIn: 3600
     });
   }
 );
