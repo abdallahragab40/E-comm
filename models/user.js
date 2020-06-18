@@ -32,6 +32,21 @@ const schema = new mongoose.Schema(
       minlength: 10,
       maxlength: 200,
     },
+    country: {
+      type: String,
+      trim: true,
+      required: true
+    },
+    city: {
+      type: String,
+      trim: true,
+      required: true
+    },
+    address: {
+      type: String,
+      trim: true,
+      required: true
+    },
     tokens: [
       {
         token: {

@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
-const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const util = require("util");
@@ -11,19 +10,14 @@ const jwtVerify = util.promisify(jwt.verify);
 
 const instructorSchema = new mongoose.Schema(
   {
-    firstName: {
+    username: {
       type: String,
       required: true,
+      unique: true,
       trim: true,
-      minlength: [2, "too short"],
-      maxlength: [30, "too long"],
-    },
-    lastName: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: [2, "too short"],
-      maxlength: [30, "too long"],
+      lowercase: true,
+      minlength: 3,
+      maxlength: 50,
     },
     email: {
       type: String,
@@ -38,20 +32,53 @@ const instructorSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      minlength: [7, "too short"],
-      maxlength: [30, "too long"],
+      // minlength: [7, "too short"],
+      // maxlength: [30, "too long"],
       required: true,
     },
-    phoneNumber: {
+    phone: {
       type: String,
       required: true,
     },
-    imagePath: { type: String, required: true },
+    image: { type: String, default: "https://res.cloudinary.com/dkohnctot/image/upload/v1592512933/profile_pfhamn.jpg"},
+    about: {
+      type: String,
+      trim: true,
+      // minlength: 10,
+      // maxlength: 200,
+    },
+    country: {
+      type: String,
+      trim: true,
+      required: true
+    },
+    city: {
+      type: String,
+      trim: true,
+      required: true
+    },
+    address: {
+      type: String,
+      trim: true,
+      required: true
+    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
     toJSON: {
-      transform: ({ _doc }) => _.omit(_doc, ["__v", "password"]),
+      transform(doc, ret) {
+        delete ret.password;
+        delete ret.__v;
+        delete ret.tokens;
+      },
     },
   }
 );
