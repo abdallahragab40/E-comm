@@ -40,7 +40,11 @@ const instructorSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    image: { type: String, default: "https://res.cloudinary.com/dkohnctot/image/upload/v1592512933/profile_pfhamn.jpg"},
+    image: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dkohnctot/image/upload/v1592512933/profile_pfhamn.jpg",
+    },
     about: {
       type: String,
       trim: true,
@@ -50,17 +54,17 @@ const instructorSchema = new mongoose.Schema(
     country: {
       type: String,
       trim: true,
-      required: true
+      required: true,
     },
     city: {
       type: String,
       trim: true,
-      required: true
+      required: true,
     },
     address: {
       type: String,
       trim: true,
-      required: true
+      required: true,
     },
     tokens: [
       {
@@ -104,7 +108,7 @@ instructorSchema.methods.checkPassword = async function (plainPassword) {
 instructorSchema.methods.generateToken = function () {
   const instructor = this;
   return jwtSign({ id: instructor.id, role: "instructor" }, jwtSecret, {
-    expiresIn: "1h",
+    expiresIn: "12h",
   });
 };
 

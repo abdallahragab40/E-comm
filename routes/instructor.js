@@ -9,9 +9,9 @@ const router = express.Router();
 // @desc    Register Instructor
 // @access  Public
 
-router.post("/signup", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   const url = req.protocol + "://" + req.get("host");
-  const instructor = new Instructor({...req.body});
+  const instructor = new Instructor({ ...req.body });
   await instructor.save();
   res.status(201).json({ message: "Instructor Created" });
 });
@@ -37,7 +37,7 @@ router.post("/login", validateLoginRequist, async (req, res, next) => {
     message: "Logged in successfully",
     user: instructor,
     token,
-    expiresIn: 3600
+    expiresIn: 3600,
   });
 });
 module.exports = router;

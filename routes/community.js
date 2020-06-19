@@ -11,7 +11,7 @@ const router = express.Router();
 // @desc    Register Community
 // @access  Public
 
-router.post("/signup", fileUpload.single("image"), async (req, res, next) => {
+router.post("/", fileUpload.single("image"), async (req, res, next) => {
   const url = req.protocol + "://" + req.get("host");
   const community = new Community({
     ...req.body,

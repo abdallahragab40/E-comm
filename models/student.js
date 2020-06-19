@@ -47,7 +47,7 @@ const studentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    imagePath: { type: String, required: true },
+    imagePath: { type: String },
   },
   {
     timestamps: true,
@@ -75,7 +75,7 @@ studentSchema.methods.checkPassword = async function (plainPassword) {
 studentSchema.methods.generateToken = function () {
   const student = this;
   return jwtSign({ id: student.id, role: "student" }, jwtSecret, {
-    expiresIn: "1h",
+    expiresIn: "12h",
   });
 };
 
