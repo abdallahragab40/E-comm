@@ -1,9 +1,9 @@
 const express = require("express");
-const CustomError = require("../helper/custome-error");
+const CustomError = require("../helper/Custom-error");
 
 const Community = require("../models/community");
 const fileUpload = require("../middleware/file-upload");
-const { validateLoginRequist } = require("../middleware/validateRequest");
+const { validateLoginRequest } = require("../middleware/validateRequest");
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ router.post("/", fileUpload.single("image"), async (req, res, next) => {
 // @desc    Register Community
 // @access  Public
 
-router.post("/login", validateLoginRequist, async (req, res, next) => {
+router.post("/login", validateLoginRequest, async (req, res, next) => {
   let community = await Community.findOne({ email: req.body.email });
 
   if (!community) {

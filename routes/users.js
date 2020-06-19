@@ -3,7 +3,7 @@ const router = express.Router();
 const Student = require("../models/student");
 const Instructor = require("../models/instructor");
 const Community = require("../models/community");
-const CustomError = require("../helper/custome-error");
+const CustomError = require("../helper/Custom-error");
 
 router.post("/login", async (req, res, next) => {
   let student = await Student.findOne({ email: req.body.email });

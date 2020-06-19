@@ -1,7 +1,7 @@
 const express = require("express");
 const Instructor = require("../models/instructor");
-const CustomError = require("../helper/custome-error");
-const { validateLoginRequist } = require("../middleware/validateRequest");
+const CustomError = require("../helper/Custom-error");
+const { validateLoginRequest } = require("../middleware/validateRequest");
 
 const router = express.Router();
 
@@ -20,16 +20,16 @@ router.post("/", async (req, res, next) => {
 // @desc    Register Instructor
 // @access  Public
 
-router.post("/login", validateLoginRequist, async (req, res, next) => {
+router.post("/login", validateLoginRequest, async (req, res, next) => {
   let instructor = await Instructor.findOne({ email: req.body.email });
 
   if (!instructor) {
-    throw new CustomError("Email not exists", 401);
+    throw new CustomError("Invalid credentials", 401);
   }
 
   const matchPassword = await instructor.checkPassword(req.body.password);
   if (!matchPassword) {
-    throw new CustomError("Incorrect Password", 401);
+    throw new CustomError("Invalid credentials", 401);
   }
 
   const token = await instructor.generateToken();

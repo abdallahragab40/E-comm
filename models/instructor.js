@@ -32,8 +32,8 @@ const instructorSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      // minlength: [7, "too short"],
-      // maxlength: [30, "too long"],
+      minlength: [8, "too short"],
+      maxlength: [30, "too long"],
       required: true,
     },
     phone: {
@@ -48,8 +48,6 @@ const instructorSchema = new mongoose.Schema(
     about: {
       type: String,
       trim: true,
-      // minlength: 10,
-      // maxlength: 200,
     },
     country: {
       type: String,
@@ -107,9 +105,11 @@ instructorSchema.methods.checkPassword = async function (plainPassword) {
 
 instructorSchema.methods.generateToken = function () {
   const instructor = this;
-  return jwtSign({ id: instructor.id, role: "instructor" }, jwtSecret, {
-    expiresIn: "12h",
+  const token = jwtSign({ id: instructor._id.toString(), role: "instructor" }, jwtSecret, {
+    expiresIn: "1h",
   });
+  instructor.tokens.push({ token });
+  return token
 };
 
 instructorSchema.statics.getInstructorFromToken = async function (token) {
