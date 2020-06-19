@@ -1,12 +1,12 @@
 const express = require("express");
-const CustomError = require("../helper/custome-error");
+const CustomError = require("../helper/custom-error");
 const {
   validateRegisteredStudent,
-  validateLoginRequist,
+  validateLoginRequest,
+  validateAccessCode
 } = require("../middleware/validateRequest");
 
 const Student = require("../models/student");
-const fileUpload = require("../middleware/file-upload");
 
 const router = express.Router();
 
@@ -17,7 +17,6 @@ const router = express.Router();
 router.post(
   "/signup",
   validateRegisteredStudent,
-  fileUpload.single("image"),
   async (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
     const student = new Student({
@@ -33,7 +32,7 @@ router.post(
 // @desc    Register Student
 // @access  Public
 
-router.post("/login", validateLoginRequist, async (req, res, next) => {
+router.post("/login", validateLoginRequest, async (req, res, next) => {
   let student = await Student.findOne({ email: req.body.email });
 
   if (!student) {
@@ -52,4 +51,10 @@ router.post("/login", validateLoginRequist, async (req, res, next) => {
     token,
   });
 });
+
+router.post("/access-code", validateAccessCode, async (req, res, next) => {
+  //check access code validity
+  res.json({valid: true});
+})
+
 module.exports = router;
