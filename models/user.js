@@ -35,17 +35,17 @@ const schema = new mongoose.Schema(
     country: {
       type: String,
       trim: true,
-      required: true
+      required: true,
     },
     city: {
       type: String,
       trim: true,
-      required: true
+      required: true,
     },
     address: {
       type: String,
       trim: true,
-      required: true
+      required: true,
     },
     tokens: [
       {
@@ -73,7 +73,7 @@ schema.plugin(uniqueValidator, { message: "already in use" });
 schema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user._id.toString() }, jwtSecret, {
-    expiresIn: "1h",
+    expiresIn: "12h",
   });
   user.tokens.push({ token });
   await user.save();

@@ -40,7 +40,11 @@ const instructorSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    image: { type: String, default: "https://res.cloudinary.com/dkohnctot/image/upload/v1592512933/profile_pfhamn.jpg"},
+    image: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dkohnctot/image/upload/v1592512933/profile_pfhamn.jpg",
+    },
     about: {
       type: String,
       trim: true,
@@ -48,17 +52,17 @@ const instructorSchema = new mongoose.Schema(
     country: {
       type: String,
       trim: true,
-      required: true
+      required: true,
     },
     city: {
       type: String,
       trim: true,
-      required: true
+      required: true,
     },
     address: {
       type: String,
       trim: true,
-      required: true
+      required: true,
     },
     tokens: [
       {

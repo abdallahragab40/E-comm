@@ -51,7 +51,7 @@ const communitySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    imagePath: { type: String, required: true },
+    imagePath: { type: String },
   },
   {
     timestamps: true,
@@ -82,7 +82,7 @@ communitySchema.methods.checkPassword = async function (plainPassword) {
 communitySchema.methods.generateToken = function () {
   const community = this;
   return jwtSign({ id: community.id, role: "community" }, jwtSecret, {
-    expiresIn: "1h",
+    expiresIn: "12h",
   });
 };
 

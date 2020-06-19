@@ -15,13 +15,14 @@ const router = express.Router();
 // @access  Public
 
 router.post(
-  "/signup",
+  "/",
   validateRegisteredStudent,
+  // fileUpload.single("image"),
   async (req, res, next) => {
-    const url = req.protocol + "://" + req.get("host");
+    // const url = req.protocol + "://" + req.get("host");
     const student = new Student({
       ...req.body,
-      imagePath: url + "/public/images/" + req.file.filename,
+      // imagePath: url + "/public/images/" + req.file.filename,
     });
     await student.save();
     res.status(201).json({ message: "Student Created" });

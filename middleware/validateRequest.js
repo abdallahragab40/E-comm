@@ -28,6 +28,19 @@ const validateRegisteredStudent = [
   },
 ];
 
+const validateAddCourse = [
+  check("title").notEmpty().withMessage("title is required"),
+  check("describtion").notEmpty().withMessage("describtion is required"),
+  check("community").notEmpty().withMessage("community is required"),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new CustomError("Invalid request params", 422, errors.mapped());
+    }
+    next();
+  },
+];
+
 const validateAccessCode = [
   check("accessCode").notEmpty().withMessage("Access code is required"),
   (req, res, next) => {
@@ -39,8 +52,10 @@ const validateAccessCode = [
   },
 ]
 
+
 module.exports = {
   validateRegisteredStudent,
   validateLoginRequest,
-  validateAccessCode
+  validateAccessCode,
+  validateAddCourse,
 };

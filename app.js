@@ -11,6 +11,7 @@ const usersRouter = require("./routes/users");
 const instructorRouter = require("./routes/instructor");
 const communityRouter = require("./routes/community");
 const studentRouter = require("./routes/student");
+const coursesRouter = require("./routes/courses");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use("/users", usersRouter);
 app.use("/instructor", instructorRouter);
 app.use("/community", communityRouter);
 app.use("/student", studentRouter);
+app.use("/courses", coursesRouter);
 
 // Error Handler
 app.use((error, req, res, next) => {
