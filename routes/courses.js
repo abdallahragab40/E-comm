@@ -25,11 +25,12 @@ router.post(
     }
     req.body = { ...req.body, keywords: req.body.keywords.split(",") };
     const course = new Course(req.body);
+    course.instructor = req.user;
     await course.save();
     await instructor.updateOne({
       $push: { courses: course._id },
     });
-    res.status(201).json({ message: "Course Created" });
+    res.status(201).json({ message: "Course Created", course });
   }
 );
 

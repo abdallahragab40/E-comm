@@ -70,6 +70,7 @@ const instructorSchema = new mongoose.Schema(
         ref: "course",
       },
     ],
+    teaches: [{ type: mongoose.Schema.ObjectId, ref: "student" }],
     tokens: [
       {
         token: {

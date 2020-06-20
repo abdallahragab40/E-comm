@@ -7,6 +7,9 @@ const {
 } = require("../middleware/validateRequest");
 
 const Student = require("../models/student");
+const Course = require("../models/course");
+const Instructor = require("../models/instructor");
+
 
 const router = express.Router();
 
@@ -17,15 +20,13 @@ const router = express.Router();
 router.post(
   "/",
   validateRegisteredStudent,
-  // fileUpload.single("image"),
   async (req, res, next) => {
-    // const url = req.protocol + "://" + req.get("host");
-    const student = new Student({
-      ...req.body,
-      // imagePath: url + "/public/images/" + req.file.filename,
-    });
+    const course = await Course.findOne({ accessCode: req.body.accessCode }).populate({path: "instructor"})
+    const student = new Student({...req.body});
+    student.courses.push(course);
+    student.instructedBy.push(course.instructor);
     await student.save();
-    res.status(201).json({ message: "Student Created" });
+    res.status(201).json({ message: "Student Created" }, student);
   }
 );
 
@@ -54,7 +55,10 @@ router.post("/login", validateLoginRequest, async (req, res, next) => {
 });
 
 router.post("/access-code", validateAccessCode, async (req, res, next) => {
-  //check access code validity
+  const course = await Course.findOne({ accessCode: req.body.accessCode });
+  if(!course) {
+    res.json({valid: false});
+  }
   res.json({valid: true});
 })
 
