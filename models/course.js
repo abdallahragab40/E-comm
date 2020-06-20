@@ -27,17 +27,15 @@ const courseSchema = new Schema({
     trim: true,
     required: true
   },
-  instructors: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "instructor",
-    },
-  ],
-  community: {
+  instructor: {
     type: Schema.Types.ObjectId,
-    ref: "community",
-    required: true,
+    ref: "instructor",
   },
+  // community: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "community",
+  //   required: true,
+  // },
   students: [
     {
       type: Schema.Types.ObjectId,

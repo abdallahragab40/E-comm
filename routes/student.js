@@ -7,6 +7,9 @@ const {
 } = require("../middleware/validateRequest");
 
 const Student = require("../models/student");
+const Course = require("../models/course");
+const Instructor = require("../models/instructor");
+
 
 const router = express.Router();
 
@@ -18,10 +21,10 @@ router.post(
   "/",
   validateRegisteredStudent,
   async (req, res, next) => {
-    const course = await Course.findOne({ accessCode: req.body.accessCode }).populate({path: "instructors"})
+    const course = await Course.findOne({ accessCode: req.body.accessCode }).populate({path: "instructor"})
     const student = new Student({...req.body});
     student.courses.push(course);
-    student.instructedBy = student.instructedBy.concat(course.instructors);
+    student.instructedBy.push(course.instructor);
     await student.save();
     res.status(201).json({ message: "Student Created" }, student);
   }

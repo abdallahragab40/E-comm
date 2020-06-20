@@ -14,10 +14,9 @@ const validateLoginRequest = [
 ];
 
 const validateRegisteredStudent = [
-  check("firstName").notEmpty().withMessage("first name is required"),
-  check("lastName").notEmpty().withMessage("last name is required"),
+  check("username").notEmpty().withMessage("username is required"),
   check("email").notEmpty().withMessage("email is required"),
-  check("phoneNumber").notEmpty().withMessage("phoneNumber is required"),
+  check("phone").notEmpty().withMessage("phone is required"),
   check("password").notEmpty().withMessage("password is required"),
   (req, res, next) => {
     const errors = validationResult(req);
@@ -30,8 +29,7 @@ const validateRegisteredStudent = [
 
 const validateAddCourse = [
   check("title").notEmpty().withMessage("title is required"),
-  check("describtion").notEmpty().withMessage("describtion is required"),
-  check("community").notEmpty().withMessage("community is required"),
+  check("description").notEmpty().withMessage("description is required"),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

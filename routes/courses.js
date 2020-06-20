@@ -19,8 +19,9 @@ router.post(
   role(["community", "instructor"]),
   async (req, res, next) => {
     const course = new Course(req.body);
+    course.instructor = req.user;
     await course.save();
-    res.status(201).json({ message: "Course Created" });
+    res.status(201).json({ message: "Course Created", course });
   }
 );
 
