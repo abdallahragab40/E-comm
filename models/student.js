@@ -65,6 +65,13 @@ const studentSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
+    imagePath: { type: String },
+    courses: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "course",
+      },
+    ],
     tokens: [
       {
         token: {
@@ -73,8 +80,7 @@ const studentSchema = new mongoose.Schema(
         },
       },
     ],
-    instructedBy: [{ type: mongoose.Schema.ObjectId, ref: "Instructor", required: true }],
-    courses: [{ type: mongoose.Schema.ObjectId, ref: "Course", required: true }],
+    instructedBy: [{ type: mongoose.Schema.ObjectId, ref: "instructor", required: true }],
   },
   {
     timestamps: true,

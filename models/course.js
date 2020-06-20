@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const { v4: uuidv4 } = require("uuid");
 
 const courseSchema = new Schema({
   title: {
@@ -16,32 +17,37 @@ const courseSchema = new Schema({
     required: true,
   },
   keyWords: [String],
+  duration: Number,
   category: {
     type: String,
     trim: true,
     minlength: [3, "Category is too short"],
     maxlength: [20, "Category is too long"],
   },
-  accessCode: {
-    type: String,
-    trim: true,
-    required: true
-  },
-  instructor: {
-    type: Schema.Types.ObjectId,
-    ref: "instructor",
-  },
-  // community: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: "community",
-  //   required: true,
-  // },
+  instructors: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "instructor",
+    },
+  ],
   students: [
     {
       type: Schema.Types.ObjectId,
       ref: "student",
     },
   ],
+  accessCode: {
+    type: String,
+    default: uuidv4(),
+  },
+  creator: {
+    type: Schema.Types.ObjectId,
+    ref: "instructor",
+    required: true,
+  },
+},
+{
+    timestamps: true
 });
 
 module.exports = model("course", courseSchema);
