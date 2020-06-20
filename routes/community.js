@@ -13,10 +13,14 @@ const router = express.Router();
 
 router.post("/", fileUpload.single("image"), async (req, res, next) => {
   const url = req.protocol + "://" + req.get("host");
-  const community = new Community({
-    ...req.body,
-    imagePath: url + "/public/images/" + req.file.filename,
-  });
+
+  if (req.file) {
+    req.body = {
+      ...req.body,
+      imagePath: url + "/public/images/" + req.file.filename,
+    };
+  }
+  const community = new Community(req.body);
   await community.save();
   res.status(201).json({ message: "Community Created" });
 });

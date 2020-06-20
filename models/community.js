@@ -12,7 +12,7 @@ const jwtVerify = util.promisify(jwt.verify);
 
 const communitySchema = new mongoose.Schema(
   {
-    fullName: {
+    name: {
       type: String,
       required: true,
       trim: true,
@@ -52,6 +52,9 @@ const communitySchema = new mongoose.Schema(
       required: true,
     },
     imagePath: { type: String },
+    country: String,
+    city: String,
+    address: String,
   },
   {
     timestamps: true,

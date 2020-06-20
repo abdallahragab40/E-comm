@@ -48,6 +48,12 @@ const studentSchema = new mongoose.Schema(
       required: true,
     },
     imagePath: { type: String },
+    courses: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "course",
+      },
+    ],
   },
   {
     timestamps: true,

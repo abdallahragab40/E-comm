@@ -64,6 +64,12 @@ const instructorSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
+    courses: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "course",
+      },
+    ],
     tokens: [
       {
         token: {
@@ -105,11 +111,15 @@ instructorSchema.methods.checkPassword = async function (plainPassword) {
 
 instructorSchema.methods.generateToken = function () {
   const instructor = this;
-  const token = jwtSign({ id: instructor._id.toString(), role: "instructor" }, jwtSecret, {
-    expiresIn: "1h",
-  });
+  const token = jwtSign(
+    { id: instructor._id.toString(), role: "instructor" },
+    jwtSecret,
+    {
+      expiresIn: "12h",
+    }
+  );
   instructor.tokens.push({ token });
-  return token
+  return token;
 };
 
 instructorSchema.statics.getInstructorFromToken = async function (token) {
