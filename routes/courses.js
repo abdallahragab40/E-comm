@@ -1,5 +1,5 @@
 const express = require("express");
-const CustomError = require("../helper/custome-error");
+const CustomError = require("../helper/custom-error");
 const Course = require("../models/course");
 const role = require("../middleware/validate-role");
 const authenticate = require("../middleware/auth");

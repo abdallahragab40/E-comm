@@ -1,4 +1,4 @@
-const CustomError = require("../helper/custome-error");
+const CustomError = require("../helper/custom-error");
 
 const role = (roles) => {
   return (req, res, next) => {
