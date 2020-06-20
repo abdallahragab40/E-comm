@@ -10,8 +10,6 @@ const getUserByRole = (role, id) => {
       return Instructor.findById(id);
     case "community":
       return Community.findById(id);
-    default:
-      return null;
   }
 };
 

@@ -13,6 +13,15 @@ router.get("/", authenticate, async (req, res, next) => {
   res.json(courses);
 });
 
+router.get("/instructor", authenticate, async (req, res, next) => {
+  const courses = await Course.find({ creator: req.user._id });
+  res.json(courses);
+});
+router.get("/:id", authenticate, async (req, res, next) => {
+  const courses = await Course.findById(req.params.id);
+  res.json(courses);
+});
+
 router.post(
   "/",
   authenticate,
