@@ -8,19 +8,24 @@ const courseSchema = new Schema({
     maxlength: [40, "Title is too long"],
     required: true,
   },
-  describtion: {
+  description: {
     type: String,
     trim: true,
-    minlength: [20, "Describtion is too short"],
-    maxlength: [200, "Describtion is too long"],
+    minlength: [20, "Description is too short"],
+    maxlength: [200, "Description is too long"],
     required: true,
   },
   keyWords: [String],
   category: {
     type: String,
     trim: true,
-    minlength: [3, "Ctegory is too short"],
-    maxlength: [20, "Ctegory is too long"],
+    minlength: [3, "Category is too short"],
+    maxlength: [20, "Category is too long"],
+  },
+  accessCode: {
+    type: String,
+    trim: true,
+    required: true
   },
   instructors: [
     {

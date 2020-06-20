@@ -64,6 +64,8 @@ const instructorSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
+    teaches: [{ type: mongoose.Schema.ObjectId, ref: "Student" }],
+    courses: [{ type: mongoose.Schema.ObjectId, ref: "Course", required: true }],
     tokens: [
       {
         token: {

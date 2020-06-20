@@ -17,15 +17,13 @@ const router = express.Router();
 router.post(
   "/",
   validateRegisteredStudent,
-  // fileUpload.single("image"),
   async (req, res, next) => {
-    // const url = req.protocol + "://" + req.get("host");
-    const student = new Student({
-      ...req.body,
-      // imagePath: url + "/public/images/" + req.file.filename,
-    });
+    const course = await Course.findOne({ accessCode: req.body.accessCode }).populate({path: "instructors"})
+    const student = new Student({...req.body});
+    student.courses.push(course);
+    student.instructedBy = student.instructedBy.concat(course.instructors);
     await student.save();
-    res.status(201).json({ message: "Student Created" });
+    res.status(201).json({ message: "Student Created" }, student);
   }
 );
 
@@ -54,7 +52,10 @@ router.post("/login", validateLoginRequest, async (req, res, next) => {
 });
 
 router.post("/access-code", validateAccessCode, async (req, res, next) => {
-  //check access code validity
+  const course = await Course.findOne({ accessCode: req.body.accessCode });
+  if(!course) {
+    res.json({valid: false});
+  }
   res.json({valid: true});
 })
 

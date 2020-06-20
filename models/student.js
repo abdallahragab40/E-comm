@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
-const _ = require("lodash");
 
 const { saltRounds, jwtSecret } = require("../config");
 const bcrypt = require("bcrypt");
@@ -12,19 +11,14 @@ const jwtVerify = util.promisify(jwt.verify);
 
 const studentSchema = new mongoose.Schema(
   {
-    firstName: {
+    username: {
       type: String,
       required: true,
+      unique: true,
       trim: true,
-      minlength: [2, "too short"],
-      maxlength: [30, "too long"],
-    },
-    lastName: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: [2, "too short"],
-      maxlength: [30, "too long"],
+      lowercase: true,
+      minlength: 3,
+      maxlength: 50,
     },
     email: {
       type: String,
@@ -39,20 +33,57 @@ const studentSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      minlength: [7, "too short"],
+      minlength: [8, "too short"],
       maxlength: [30, "too long"],
       required: true,
     },
-    phoneNumber: {
+    phone: {
       type: String,
       required: true,
     },
-    imagePath: { type: String },
+    image: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dkohnctot/image/upload/v1592512933/profile_pfhamn.jpg",
+    },
+    about: {
+      type: String,
+      trim: true,
+    },
+    country: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    city: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    address: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    instructedBy: [{ type: mongoose.Schema.ObjectId, ref: "Instructor", required: true }],
+    courses: [{ type: mongoose.Schema.ObjectId, ref: "Course", required: true }],
   },
   {
     timestamps: true,
     toJSON: {
-      transform: ({ _doc }) => _.omit(_doc, ["__v", "password"]),
+      transform(doc, ret) {
+        delete ret.password;
+        delete ret.__v;
+        delete ret.tokens;
+      },
     },
   }
 );
@@ -74,9 +105,11 @@ studentSchema.methods.checkPassword = async function (plainPassword) {
 
 studentSchema.methods.generateToken = function () {
   const student = this;
-  return jwtSign({ id: student.id, role: "student" }, jwtSecret, {
-    expiresIn: "12h",
+  const token = jwtSign({ id: student._id.toString(), role: "student" }, jwtSecret, {
+    expiresIn: "1h",
   });
+  student.tokens.push({ token });
+  return token
 };
 
 studentSchema.statics.getStudentFromToken = async function (token) {
