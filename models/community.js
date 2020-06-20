@@ -51,7 +51,11 @@ const communitySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    imagePath: { type: String },
+    image: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dkohnctot/image/upload/v1592512933/profile_pfhamn.jpg",
+    },
     country: String,
     city: String,
     address: String,

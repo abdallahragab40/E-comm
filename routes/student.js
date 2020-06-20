@@ -21,12 +21,21 @@ router.post(
   "/",
   validateRegisteredStudent,
   async (req, res, next) => {
-    const course = await Course.findOne({ accessCode: req.body.accessCode }).populate({path: "instructor"})
+    const course = await Course.findOne({ accessCode: req.body.accessCode }).populate({path: "creator"});
+    if (!course) {
+      return res.status(400).json({ message: "Access code is wrong" });
+    }
     const student = new Student({...req.body});
+    await course.updateOne({
+      $push: { students: student._id },
+    });
+    await course.creator.updateOne({
+      $push: { teaches: student._id },
+    });
     student.courses.push(course);
-    student.instructedBy.push(course.instructor);
+    student.instructedBy.push(course.creator);
     await student.save();
-    res.status(201).json({ message: "Student Created" }, student);
+    return res.status(201).json({ message: "Student Created" });
   }
 );
 
@@ -57,9 +66,9 @@ router.post("/login", validateLoginRequest, async (req, res, next) => {
 router.post("/access-code", validateAccessCode, async (req, res, next) => {
   const course = await Course.findOne({ accessCode: req.body.accessCode });
   if(!course) {
-    res.json({valid: false});
+    return res.json({valid: false});
   }
-  res.json({valid: true});
+  return res.json({valid: true});
 })
 
 module.exports = router;

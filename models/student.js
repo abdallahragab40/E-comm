@@ -65,7 +65,6 @@ const studentSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
-    imagePath: { type: String },
     courses: [
       {
         type: mongoose.Schema.Types.ObjectId,

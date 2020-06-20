@@ -29,7 +29,7 @@ const validateRegisteredStudent = [
 
 const validateAddCourse = [
   check("title").notEmpty().withMessage("title is required"),
-  check("describtion").notEmpty().withMessage("describtion is required"),
+  check("description").notEmpty().withMessage("description is required"),
   check("duration").notEmpty().withMessage("duration is required"),
   (req, res, next) => {
     const errors = validationResult(req);

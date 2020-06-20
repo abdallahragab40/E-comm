@@ -19,15 +19,10 @@ router.post(
   validateAddCourse,
   role(["instructor"]),
   async (req, res, next) => {
-    const instructor = await Instructor.findById(req.body.creator);
-    if (!instructor) {
-      throw new CustomError("Authorization faild", 401);
-    }
-    req.body = { ...req.body, keywords: req.body.keywords.split(",") };
+    req.body = { ...req.body, keywords: req.body.keywords.split(","), creator: req.user };
     const course = new Course(req.body);
-    course.instructor = req.user;
     await course.save();
-    await instructor.updateOne({
+    await req.user.updateOne({
       $push: { courses: course._id },
     });
     res.status(201).json({ message: "Course Created", course });
