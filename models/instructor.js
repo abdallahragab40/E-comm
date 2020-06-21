@@ -33,7 +33,6 @@ const instructorSchema = new mongoose.Schema(
     password: {
       type: String,
       minlength: [8, "too short"],
-      maxlength: [30, "too long"],
       required: true,
     },
     phone: {
@@ -63,6 +62,11 @@ const instructorSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: true,
+    },
+    plan: {
+      type: String,
+      trim: true,
+      default: "free"
     },
     courses: [
       {
@@ -116,7 +120,7 @@ instructorSchema.methods.generateToken = function () {
     { id: instructor._id.toString(), role: "instructor" },
     jwtSecret,
     {
-      expiresIn: "12h",
+      expiresIn: "1h",
     }
   );
   instructor.tokens.push({ token });

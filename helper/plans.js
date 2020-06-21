@@ -1,1 +1,1 @@
-module.exports = ["free", "basic", "pro", "premium"];
+module.exports = ["Free", "Basic", "Premium", "Gold"];

@@ -2,6 +2,7 @@ const express = require("express");
 const Instructor = require("../models/instructor");
 const CustomError = require("../helper/Custom-error");
 const { validateLoginRequest } = require("../middleware/validateRequest");
+const authenticate = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -40,4 +41,16 @@ router.post("/login", validateLoginRequest, async (req, res, next) => {
     expiresIn: 3600,
   });
 });
+
+router.post("/plan", authenticate, async (req, res, next) => {
+  const instructor = req.user;
+  instructor.plan = req.body.plan;
+  await instructor.save();
+  res.status(201).json({ message: `You have Successfully upgraded your account to ${instructor.plan} plan`, plan: instructor.plan});
+})
+
+router.get("/plan", authenticate, async (req, res, next) => {
+  res.json({plan: req.user.plan}); 
+})
+
 module.exports = router;
