@@ -6,12 +6,12 @@ const logger = require("morgan");
 const cors = require("cors");
 const { port } = require("./config");
 
-var indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const instructorRouter = require("./routes/instructor");
 const communityRouter = require("./routes/community");
 const studentRouter = require("./routes/student");
 const coursesRouter = require("./routes/courses");
+const faqsRouter = require("./routes/faqs");
 
 const app = express();
 
@@ -21,12 +21,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/instructor", instructorRouter);
 app.use("/community", communityRouter);
 app.use("/student", studentRouter);
 app.use("/courses", coursesRouter);
+app.use("/faqs", faqsRouter);
 
 // Error Handler
 app.use((error, req, res, next) => {
