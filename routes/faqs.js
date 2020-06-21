@@ -1,66 +1,45 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 
 /* GET faqs */
 router.get("/", async (req, res, next) => {
   const faqs = [
     {
-        'question': 'Proident tempor est nulla irure ad est?',
-        'answer': 'Id nulla nulla proident deserunt deserunt proident in quis. Cillum reprehenderit labore id anim laborum.'
+      question: "How to register as a Student?",
+      answer:
+        "You can get an access code from your instuctor to be able to complete registeration process and add your own information then customize your profile.",
     },
     {
-        'question': 'Ullamco duis commodo sint ad aliqua aute?',
-        'answer': 'Sunt laborum enim nostrud ea fugiat cillum mollit aliqua exercitation ad elit.'
+      question: "How to enroll in a Course as a Student?",
+      answer:
+        "As long as you have an access code from instructor you will have the ability to enroll in a course and see all information about this course.",
     },
     {
-        'question': 'Eiusmod non occaecat pariatur Lorem in ex?',
-        'answer': 'Nostrud anim mollit incididunt qui qui sit commodo duis. Anim amet irure aliquip duis nostrud sit quis fugiat ullamco non dolor labore. Lorem sunt voluptate laboris culpa proident. Aute eiusmod aliqua exercitation irure exercitation qui laboris mollit occaecat eu occaecat fugiat.'
+      question: "How to register as a Instructor?",
+      answer:
+        "You can choose your suitable plan from pricing table and continue adding your own information and customize your own profile.",
     },
     {
-        'question': 'Lorem magna cillum consequat consequat mollit?',
-        'answer': 'Velit ipsum proident ea incididunt et. Consectetur eiusmod laborum voluptate duis occaecat ullamco sint enim proident.'
+      question: "How to add a Course as a Instructor?",
+      answer:
+        "You can go to courses page, then click on add a course and put all couse information to be appeared to your own students.",
     },
     {
-        'question': 'Quis irure cupidatat ad consequat reprehenderit excepteur?',
-        'answer': 'Esse nisi mollit aliquip mollit aute consequat adipisicing. Do excepteur dolore proident cupidatat pariatur irure consequat incididunt.'
+      question: "How to pay for subscription?",
+      answer:
+        "Once you create an account you can choose your plan and pay through your paypal account.",
     },
     {
-        'question': 'Officia voluptate tempor ut mollit ea cillum?',
-        'answer': 'Deserunt veniam reprehenderit do elit magna ut.'
+      question: "How to add new event or todo?",
+      answer:
+        "You can click on forgot password and type your email and you will get an email with link allow you to change you password.",
     },
     {
-        'question': 'Sunt fugiat officia nisi minim sunt duis?',
-        'answer': 'Eiusmod eiusmod sint aliquip exercitation cillum. Magna nulla officia ex consectetur ea ad excepteur in qui.'
+      question: "How to send a message as a student?",
+      answer:
+        "You can go to your profile and click on send message and and type your message then click send button",
     },
-    {
-        'question': 'Non cupidatat enim quis aliquip minim laborum?',
-        'answer': 'Qui cillum eiusmod nostrud sunt dolore velit nostrud labore voluptate ad dolore. Eu Lorem anim pariatur aliqua. Ullamco ut dolor velit esse occaecat dolore eu cillum commodo qui. Nulla dolor consequat voluptate magna ut commodo magna consectetur non aute proident.'
-    },
-    {
-        'question': 'Dolor ex occaecat magna labore laboris qui?',
-        'answer': 'Incididunt qui excepteur eiusmod elit cillum occaecat voluptate cillum nostrud. Dolor ullamco ullamco eiusmod do sunt adipisicing pariatur. In esse esse labore id reprehenderit sint do. Pariatur culpa dolor tempor qui excepteur duis do anim minim ipsum.'
-    },
-    {
-        'question': 'Nisi et ullamco minim ea proident tempor?',
-        'answer': 'Dolor veniam dolor cillum Lorem magna nisi in occaecat nulla dolor ea eiusmod.'
-    },
-    {
-        'question': 'Amet sunt et quis amet commodo quis?',
-        'answer': 'Nulla dolore consequat aliqua sint consequat elit qui occaecat et.'
-    },
-    {
-        'question': 'Ut eiusmod ex ea eiusmod culpa incididunt?',
-        'answer': 'Fugiat non incididunt officia ex incididunt occaecat. Voluptate nostrud culpa aliquip mollit incididunt non dolore.'
-    },
-    {
-        'question': 'Proident reprehenderit laboris pariatur ut et nisi?',
-        'answer': 'Reprehenderit proident ut ad cillum quis velit quis aliqua ut aliquip tempor ullamco.'
-    },
-    {
-        'question': 'Aliqua aliquip aliquip aliquip et exercitation aute?',
-        'answer': 'Adipisicing Lorem tempor ex anim. Labore tempor laboris nostrud dolore voluptate ullamco. Fugiat ex deserunt anim minim esse velit laboris aute ea duis incididunt. Elit irure id Lorem incididunt laborum aliquip consectetur est irure sunt. Ut labore anim nisi aliqua tempor laborum nulla cillum. Duis irure consequat cillum magna cillum eiusmod ut. Et exercitation voluptate quis deserunt elit quis dolor deserunt ex ex esse ex.'
-    }
-];
+  ];
   res.json({ faqs });
 });
 
