@@ -4,6 +4,9 @@ const Student = require("../models/student");
 const Instructor = require("../models/instructor");
 const Community = require("../models/community");
 const CustomError = require("../helper/Custom-error");
+const auth = require("../middleware/auth");
+const fileUpload = require("../middleware/file-upload");
+const cloudinary = require("cloudinary").v2;
 
 router.post("/login", async (req, res, next) => {
   let student = await Student.findOne({ email: req.body.email });
@@ -54,5 +57,26 @@ router.post("/unique-username", async (req, res, next) => {
   }
   return res.json({unique: true});  
 })
+
+//Edit user image
+router.patch(
+  "/image",
+  auth,
+  fileUpload.single("image"),
+  async (req, res, next) => {
+    if (!req.file) {
+      return next(new CustomError(400, "Please upload an image"));
+    }
+    if (req.file) {
+      const path = req.file.path;
+      const image = await cloudinary.uploader.upload(path, {
+        tags: "express_sample",
+      });
+      req.user.image = image.secure_url;
+    }
+    await req.user.save();
+    res.send({ message: "user profile image was updated successfully", user: req.user });
+  }
+);
 
 module.exports = router;
