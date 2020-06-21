@@ -12,6 +12,7 @@ const communityRouter = require("./routes/community");
 const studentRouter = require("./routes/student");
 const coursesRouter = require("./routes/courses");
 const faqsRouter = require("./routes/faqs");
+const calendarRouter = require("./routes/calendar");
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/community", communityRouter);
 app.use("/student", studentRouter);
 app.use("/courses", coursesRouter);
 app.use("/faqs", faqsRouter);
+app.use("/calendar", calendarRouter);
 
 // Error Handler
 app.use((error, req, res, next) => {
