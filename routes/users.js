@@ -80,7 +80,7 @@ router.patch(
 );
 
 //Get User public profile
-router.get("/:username", async (req, res) => {
+router.get("/:username", auth, async (req, res) => {
   let username = req.params.username;
   let instructor = await Instructor.findOne({ username }).populate("courses", "title").populate("teaches","username email image");
   if (instructor) {
