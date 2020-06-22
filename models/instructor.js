@@ -75,6 +75,7 @@ const instructorSchema = new mongoose.Schema(
       },
     ],
     teaches: [{ type: mongoose.Schema.ObjectId, ref: "student" }],
+    role: {type: String, default: "Instructor", immutable: true},
     tokens: [
       {
         token: {

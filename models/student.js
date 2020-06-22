@@ -71,6 +71,7 @@ const studentSchema = new mongoose.Schema(
         ref: "course",
       },
     ],
+    role: {type: String, default: "Student", immutable: true},
     tokens: [
       {
         token: {

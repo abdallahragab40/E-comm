@@ -79,4 +79,19 @@ router.patch(
   }
 );
 
+//Get User public profile
+router.get("/:username", async (req, res) => {
+  let username = req.params.username;
+  let instructor = await Instructor.findOne({ username }).populate("courses", "title").populate("teaches","username email image");
+  if (instructor) {
+    return res.json({user: instructor});
+
+  }
+  let student = await Student.findOne({ username }).populate("courses", "title").populate("instructedBy","username email image");
+  if (student) {
+    return res.json({user: student});
+  }
+  return res.status(404).json({message: "There is no user with such username"});
+});
+
 module.exports = router;
