@@ -5,6 +5,7 @@ const Instructor = require("../models/instructor");
 const role = require("../middleware/validate-role");
 const authenticate = require("../middleware/auth");
 const { validateAddCourse } = require("../middleware/validateRequest");
+const { v4: uuidv4 } = require("uuid");
 
 const router = express.Router();
 
@@ -28,8 +29,13 @@ router.post(
   validateAddCourse,
   role(["instructor"]),
   async (req, res, next) => {
-    req.body = { ...req.body, keywords: req.body.keywords.split(","), creator: req.user };
+    req.body = {
+      ...req.body,
+      keywords: req.body.keywords.split(","),
+      creator: req.user,
+    };
     const course = new Course(req.body);
+    course.accessCode = uuidv4();
     await course.save();
     await req.user.updateOne({
       $push: { courses: course._id },

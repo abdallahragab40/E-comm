@@ -28,35 +28,35 @@ router.post("/unique-email", async (req, res, next) => {
   let email = req.body.email;
   let student = await Student.findOne({ email });
   if (student) {
-    return res.json({unique: false});
+    return res.json({ unique: false });
   }
   let instructor = await Instructor.findOne({ email });
   if (instructor) {
-    return res.json({unique: false});
+    return res.json({ unique: false });
   }
   let community = await Community.findOne({ email });
   if (community) {
-    return res.json({unique: false});
+    return res.json({ unique: false });
   }
-  return res.json({unique: true});  
-})
+  return res.json({ unique: true });
+});
 
 router.post("/unique-username", async (req, res, next) => {
   let username = req.body.username;
   let student = await Student.findOne({ username });
   if (student) {
-    return res.json({unique: false});
+    return res.json({ unique: false });
   }
   let instructor = await Instructor.findOne({ username });
   if (instructor) {
-    return res.json({unique: false});
+    return res.json({ unique: false });
   }
   let community = await Community.findOne({ username });
   if (community) {
-    return res.json({unique: false});
+    return res.json({ unique: false });
   }
-  return res.json({unique: true});  
-})
+  return res.json({ unique: true });
+});
 
 //Edit user image
 router.patch(
@@ -75,23 +75,31 @@ router.patch(
       req.user.image = image.secure_url;
     }
     await req.user.save();
-    res.send({ message: "user profile image was updated successfully", user: req.user });
+    res.send({
+      message: "user profile image was updated successfully",
+      user: req.user,
+    });
   }
 );
 
 //Get User public profile
 router.get("/:username", auth, async (req, res) => {
   let username = req.params.username;
-  let instructor = await Instructor.findOne({ username }).populate("courses", "title").populate("teaches","username email image");
+  let instructor = await Instructor.findOne({ username })
+    .populate("courses")
+    .populate("teaches", "username email image");
   if (instructor) {
-    return res.json({user: instructor});
-
+    return res.json({ user: instructor });
   }
-  let student = await Student.findOne({ username }).populate("courses", "title").populate("instructedBy","username email image");
+  let student = await Student.findOne({ username })
+    .populate("courses")
+    .populate("instructedBy", "username email image");
   if (student) {
-    return res.json({user: student});
+    return res.json({ user: student });
   }
-  return res.status(404).json({message: "There is no user with such username"});
+  return res
+    .status(404)
+    .json({ message: "There is no user with such username" });
 });
 
 module.exports = router;

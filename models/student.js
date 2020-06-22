@@ -34,7 +34,6 @@ const studentSchema = new mongoose.Schema(
     password: {
       type: String,
       minlength: [8, "too short"],
-      maxlength: [30, "too long"],
       required: true,
     },
     phone: {
@@ -71,7 +70,7 @@ const studentSchema = new mongoose.Schema(
         ref: "course",
       },
     ],
-    role: {type: String, default: "Student", immutable: true},
+    role: { type: String, default: "Student", immutable: true },
     tokens: [
       {
         token: {
@@ -80,7 +79,9 @@ const studentSchema = new mongoose.Schema(
         },
       },
     ],
-    instructedBy: [{ type: mongoose.Schema.ObjectId, ref: "instructor", required: true }],
+    instructedBy: [
+      { type: mongoose.Schema.ObjectId, ref: "instructor", required: true },
+    ],
   },
   {
     timestamps: true,
@@ -111,11 +112,15 @@ studentSchema.methods.checkPassword = async function (plainPassword) {
 
 studentSchema.methods.generateToken = function () {
   const student = this;
-  const token = jwtSign({ id: student._id.toString(), role: "student" }, jwtSecret, {
-    expiresIn: "1h",
-  });
+  const token = jwtSign(
+    { id: student._id.toString(), role: "student" },
+    jwtSecret,
+    {
+      expiresIn: "1h",
+    }
+  );
   student.tokens.push({ token });
-  return token
+  return token;
 };
 
 studentSchema.statics.getStudentFromToken = async function (token) {

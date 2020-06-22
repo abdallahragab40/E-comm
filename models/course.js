@@ -39,7 +39,7 @@ const courseSchema = new Schema(
     ],
     accessCode: {
       type: String,
-      default: uuidv4(),
+      // default: uuidv4(),
     },
     creator: {
       type: Schema.Types.ObjectId,

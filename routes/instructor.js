@@ -22,7 +22,9 @@ router.post("/signup", async (req, res, next) => {
 // @access  Public
 
 router.post("/login", validateLoginRequest, async (req, res, next) => {
-  let instructor = await Instructor.findOne({ email: req.body.email });
+  let instructor = await Instructor.findOne({
+    email: req.body.email,
+  }).populate("teaches", { username: 1 });
 
   if (!instructor) {
     throw new CustomError("Invalid credentials", 401);
@@ -46,11 +48,14 @@ router.post("/plan", authenticate, async (req, res, next) => {
   const instructor = req.user;
   instructor.plan = req.body.plan;
   await instructor.save();
-  res.status(201).json({ message: `You have Successfully upgraded your account to ${instructor.plan} plan`, plan: instructor.plan});
-})
+  res.status(201).json({
+    message: `You have Successfully upgraded your account to ${instructor.plan} plan`,
+    plan: instructor.plan,
+  });
+});
 
 router.get("/plan", authenticate, async (req, res, next) => {
-  res.json({plan: req.user.plan}); 
-})
+  res.json({ plan: req.user.plan });
+});
 
 module.exports = router;
