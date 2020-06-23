@@ -5,11 +5,9 @@ const Community = require("../models/community");
 const getUserByRole = (role, id) => {
   switch (role) {
     case "student":
-      return Student.findById(id);
+      return Student.findById(id).populate("courses");
     case "instructor":
-      return Instructor.findById(id);
-    case "community":
-      return Community.findById(id);
+      return Instructor.findById(id).populate("courses");
   }
 };
 

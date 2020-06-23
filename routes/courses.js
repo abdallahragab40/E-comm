@@ -10,17 +10,39 @@ const { v4: uuidv4 } = require("uuid");
 const router = express.Router();
 
 router.get("/", authenticate, async (req, res, next) => {
-  const courses = await Course.find({});
-  res.json(courses);
+  res.json(req.user.courses);
 });
 
 router.get("/instructor", authenticate, async (req, res, next) => {
   const courses = await Course.find({ creator: req.user._id });
   res.json(courses);
 });
-router.get("/:id", authenticate, async (req, res, next) => {
-  const courses = await Course.findById(req.params.id);
-  res.json(courses);
+
+
+router.get("/categories", async (req, res, next) => {
+  const categories =  [
+    {
+      id: 0,
+      value: 'Computer Science',
+      label: 'Computer Science',
+    },
+    {
+      id: 1,
+      value: 'Software Engineering',
+      label: 'Software Engineering',
+    },
+    {
+      id: 2,
+      value: 'Business',
+      label: 'Business',
+    },
+    {
+      id: 3,
+      value: 'Accounting',
+      label: 'Accounting',
+    },
+  ];
+  res.json({ categories });
 });
 
 router.post(
@@ -43,5 +65,11 @@ router.post(
     res.status(201).json({ message: "Course Created", course });
   }
 );
+
+router.get("/:id", authenticate, async (req, res, next) => {
+  const courses = await Course.findById(req.params.id);
+  res.json(courses);
+});
+
 
 module.exports = router;

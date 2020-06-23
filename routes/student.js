@@ -8,6 +8,7 @@ const {
 
 const Student = require("../models/student");
 const Course = require("../models/course");
+const auth = require("../middleware/auth");
 const Instructor = require("../models/instructor");
 
 const router = express.Router();
@@ -69,6 +70,36 @@ router.post("/access-code", validateAccessCode, async (req, res, next) => {
     return res.json({ valid: false });
   }
   return res.json({ valid: true });
+});
+
+router.post("/access-course", auth, validateAccessCode, async (req, res, next) => {
+  if(req.user.role !== "Student") {
+    return res.status(401).json({message: "You must be a student to enrol courses"});
+  }
+  const course = await Course.findOne({ accessCode: req.body.accessCode }).populate("students").populate("creator");
+  if (!course) {
+    return res.status(422).json({message: "There is no course with such access code"});
+  }
+  await course.updateOne({
+    $addToSet: { students: req.user },
+  });
+  await course.creator.populate("teaches").updateOne({
+    $addToSet: { teaches: req.user },
+  });
+  await req.user.updateOne({
+    $addToSet: { instructedBy: course.creator },
+  });
+  let updatedUser;
+  if (req.user.role==="Student") {
+    updatedUser = await Student.findOneAndUpdate({courses: req.user.courses},{
+      $addToSet: { courses: course },
+    },{new: true}).populate("courses");
+  } else if (req.user.role==="Instructor") {
+    updatedUser = await Instructor.findOneAndUpdate({courses: req.user.courses},{
+      $addToSet: { courses: course },
+    },{new: true}).populate("courses");
+  }
+  return res.json({message: "A new course was added successfully", courses: updatedUser.courses});
 });
 
 module.exports = router;

@@ -45,7 +45,7 @@ const validateAccessCode = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      throw new CustomError("Invalid request params", 422, errors.mapped());
+      throw new CustomError("Access code is required", 422, errors.mapped());
     }
     next();
   },
